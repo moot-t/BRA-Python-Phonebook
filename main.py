@@ -1,4 +1,4 @@
-# {("first_name", "last_name"): ("phone_number", "sity", "state")  }
+# {("first_name", "last_name"): ("phone_number", "city", "state")  }
 phonebook = {}
 
 def add_entry():
@@ -24,22 +24,6 @@ def add_entry():
     except Exception as e:
         print(f"Error adding entry: {str(e)}")
         return False
-
-def show_phonebook():
-    """Display all entries in the phonebook."""
-    if not phonebook:
-        print("\nPhonebook is empty!")
-        return
-    
-    print("\nPhonebook entries:")
-    print("-" * 60)
-    print(f"{'Name':<20} {'Phone':<15} {'City':<15} {'State':<10}")
-    print("-" * 60)
-    
-    for (first, last), (phone, city, state) in phonebook.items():
-        full_name = f"{first} {last}"
-        print(f"{full_name:<20} {phone:<15} {city:<15} {state:<10}")
-    print("-" * 60)
 
 def search_by_first_name(): # Артем Ніколаєв
     print("Search by first name - stub")

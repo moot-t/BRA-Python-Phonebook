@@ -1,5 +1,4 @@
 import json
-import os
 
 # Ім'я файлу для збереження даних
 pb_file = "phonebook.json"
@@ -145,10 +144,8 @@ def update_by_phone_number():
     try:
         phone_to_update = input("Enter phone number to update: ").strip()
         
-        found = False
         for (first, last), (phone, city, state) in phonebook.items():
             if phone == phone_to_update:
-                found = True
                 new_phone = input("Enter new phone number (or press Enter to keep current): ").strip()
                 new_city = input("Enter new city (or press Enter to keep current): ").strip().capitalize()
                 new_state = input("Enter new state (or press Enter to keep current): ").strip().upper()
@@ -173,9 +170,8 @@ def update_by_phone_number():
                 save_phonebook()  # Зберігаємо після оновлення
                 return True
 
-        if not found:
-            print(f"\nNo entry found with phone number {phone_to_update}")
-            return False
+        print(f"\nNo entry found with phone number {phone_to_update}")
+        return False
             
     except Exception as e:
         print(f"\nError updating entry: {str(e)}")

@@ -11,9 +11,9 @@ def save_phonebook():
             f"{first_name},{last_name}": [phone_number, city, state]
             for (first_name, last_name), (phone_number, city, state) in phonebook.items()
         }
-        
-        with open(pb_file, 'w') as file:
-            json.dump(serializable_phonebook, file, indent=4)
+
+        with open(pb_file, 'w', encoding='utf-8') as file:
+            json.dump(serializable_phonebook, file, indent=4, ensure_ascii=False)
         return True
     except Exception as e:
         print(f"\nError saving phonebook: {str(e)}")
@@ -31,11 +31,12 @@ def load_phonebook():
             }
     return True
 
+
 def add_entry():
     try:
         first_name = input("Enter first name: ").strip().capitalize()
         last_name = input("Enter last name: ").strip().capitalize()
-        phone_number = input("Enter phone number: ").strip().capitalize()
+        phone_number = input("Enter phone number: ").strip()
         city = input("Enter city: ").strip().capitalize()
         state = input("Enter state: ").strip().upper()
 
@@ -43,20 +44,23 @@ def add_entry():
             print("Error: All fields are required!")
             return False
 
-        if (first_name, last_name) in phonebook:
-            # Перевіряємо чи існує запис з таким номером телефону
-            existing_phone = phonebook[(first_name, last_name)][0]
+        # Перевірка на існуючий номер телефону
+        for _, (existing_phone, _, _) in phonebook.items():
             if existing_phone == phone_number:
-                print("\nError: This person with this phone number is already in the phonebook!")
+                print("\nError: This phone number already exists in the phonebook!")
                 return False
-            else:
-                print("\nNote: Adding another entry for the same person with a different phone number.")
+
+        # Перевірка на існування контакту з таким іменем та прізвищем
+        for (f_name, l_name), _ in phonebook.items():
+            if f_name.lower() == first_name.lower() and l_name.lower() == last_name.lower():
+                print("\nError: Contact with this first name and last name already exists!")
+                return False
 
         phonebook[(first_name, last_name)] = (phone_number, city, state)
         print(f"\n {first_name} {last_name} added to the phonebook!")
         save_phonebook()  # Зберігаємо після додавання
         return True
-        
+
     except Exception as e:
         print(f"Error adding entry: {str(e)}")
         return False
@@ -107,7 +111,7 @@ def search_by_phone_number():
     if not found:
         print("No entry found with that phone number.")
 
-def search_by_city_or_state(): # Ростислав
+def search_by_city_or_state():
     query = input("Enter city or state to search: ").strip().lower()
     results = []
     for (first_name, last_name), (phone_number, city, state) in phonebook.items():
@@ -160,6 +164,9 @@ def update_by_phone_number():
                 print(f"\nUpdated entry for {first} {last}")
                 save_phonebook()  # Зберігаємо після оновлення
                 return True
+            if phone_to_update in [contact['phone_number'] for contact in phonebook]:
+                print("Error: This phone number already exists in the phonebook")
+                return False
 
         if not found:
             print(f"\nNo entry found with phone number {phone_to_update}")

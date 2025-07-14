@@ -160,14 +160,18 @@ def update_by_phone_number():
                     new_city = city
                 if not new_state:
                     new_state = state
+
+                # Перевіряємо чи новий номер телефону не існує в інших контактах
+                if new_phone != phone:  # Перевіряємо тільки якщо номер змінився
+                    for _, (existing_phone, _, _) in phonebook.items():
+                        if existing_phone == new_phone:
+                            print("\nError: This phone number already exists in the phonebook!")
+                            return False
                 
                 phonebook[(first, last)] = (new_phone, new_city, new_state)
                 print(f"\nUpdated entry for {first} {last}")
                 save_phonebook()  # Зберігаємо після оновлення
                 return True
-            if phone_to_update in [contact['phone_number'] for contact in phonebook]:
-                print("Error: This phone number already exists in the phonebook")
-                return False
 
         if not found:
             print(f"\nNo entry found with phone number {phone_to_update}")

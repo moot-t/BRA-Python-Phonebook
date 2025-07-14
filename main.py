@@ -31,7 +31,6 @@ def load_phonebook():
             }
     return True
 
-
 def add_entry():
     try:
         first_name = input("Enter first name: ").strip().capitalize()

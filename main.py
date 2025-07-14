@@ -49,17 +49,16 @@ def add_entry():
                 print("\nError: This phone number already exists in the phonebook!")
                 return False
 
-        # Перевірка на існування контакту з таким іменем та прізвищем
+        # Якщо є контакт з таким іменем - просто попереджаємо користувача
         for (f_name, l_name), _ in phonebook.items():
             if f_name.lower() == first_name.lower() and l_name.lower() == last_name.lower():
-                print("\nError: Contact with this first name and last name already exists!")
-                return False
+                print("\nNote: Another contact with this name already exists. Adding new entry with different phone number.")
 
         phonebook[(first_name, last_name)] = (phone_number, city, state)
         print(f"\n {first_name} {last_name} added to the phonebook!")
         save_phonebook()  # Зберігаємо після додавання
         return True
-
+        
     except Exception as e:
         print(f"Error adding entry: {str(e)}")
         return False

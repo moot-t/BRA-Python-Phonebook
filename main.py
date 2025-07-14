@@ -20,8 +20,8 @@ def save_phonebook():
         return False
 
 def load_phonebook():
-    global phonebook
-    if os.path.exists(pb_file):
+    try:
+        global phonebook
         with open(pb_file, 'r') as file:
             data = json.load(file)
             # Конвертуємо назад у кортежі
@@ -29,7 +29,10 @@ def load_phonebook():
                 tuple(key.split(',')): tuple(value)
                 for key, value in data.items()
             }
-    return True
+        return True
+    except Exception as e:
+        print(f"Error loading phonebook: {str(e)}")
+        return False
 
 def add_entry():
     try:
@@ -226,4 +229,6 @@ def main():
         save_phonebook()
     except KeyboardInterrupt:
         print("\n...Exiting program")
-main()
+
+if __name__ == "__main__":
+    main()
